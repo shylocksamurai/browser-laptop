@@ -94,6 +94,7 @@ if (isDarwin) {
   cmds = [
     // Remove old
     'rm -f ' + outDir + `/${appName}.dmg`,
+    'rm -f ' + outDir + `/${appName}.pkg`,
 
     // sign for widevine
     'mkdir -p "' + wvResources + '"',
@@ -113,7 +114,7 @@ if (isDarwin) {
     'cd ..',
     'build ' +
       '--prepackaged="' + buildDir + `/${appName}.app" ` +
-      '--mac=dmg ' +
+      '--mac=pkg ' +
       ` --config=res/${channel}/builderConfig.json `,
 
     // Create an update zip

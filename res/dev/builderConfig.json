@@ -3,7 +3,7 @@
   "productName": "Brave",
   "npmRebuild": false,
   "mac": {
-    "target": "dmg"
+    "target": "pkg"
   },
   "dmg": {
     "title": "Brave",
