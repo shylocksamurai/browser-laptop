@@ -98,8 +98,7 @@ module.exports = {
     enabled: true
   },
   firewall: {
-    enabled: true,
-    whitelistHosts: ['localhost']
+    enabled: false
   },
   adInsertion: {
     enabled: false,

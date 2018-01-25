@@ -53,7 +53,7 @@ const trackingProtection = appConfig.resourceNames.TRACKING_PROTECTION
 const httpsEverywhere = appConfig.resourceNames.HTTPS_EVERYWHERE
 const safeBrowsing = appConfig.resourceNames.SAFE_BROWSING
 const noScript = appConfig.resourceNames.NOSCRIPT
-const flash = appConfig.resourceNames.FLASH
+const firewall = appConfig.resourceNames.FIREWALL
 
 const isDarwin = navigator.platform === 'MacIntel'
 
@@ -551,21 +551,13 @@ class SecurityTab extends ImmutableComponent {
   constructor (e) {
     super()
     this.clearBrowsingDataNow = this.clearBrowsingDataNow.bind(this)
+    this.onToggleFirewall = this.onToggleFirewall.bind(this)
+  }
+  onToggleFirewall (e) {
+    aboutActions.setResourceEnabled(firewall, e.target.value)
   }
   clearBrowsingDataNow () {
     aboutActions.clearBrowsingDataNow()
-  }
-  onToggleFlash (e) {
-    aboutActions.setResourceEnabled(flash, e.target.value)
-    if (e.target.value !== true) {
-      // When flash is disabled, clear flash approvals
-      aboutActions.clearSiteSettings('flash', {
-        temporary: true
-      })
-      aboutActions.clearSiteSettings('flash', {
-        temporary: false
-      })
-    }
   }
   render () {
     const lastPassPreferencesUrl = ('chrome-extension://' + extensionIds[passwordManagers.LAST_PASS] + '/tabDialog.html?dialog=preferences&cmd=open')
@@ -667,6 +659,10 @@ class SecurityTab extends ImmutableComponent {
       <DefaultSectionTitle data-l10n-id='siteIsolation' />
       <SettingsList>
         <SettingCheckbox dataL10nId='useSiteIsolation' prefKey={settings.SITE_ISOLATION_ENABLED} settings={this.props.settings} onChangeSetting={this.props.onChangeSetting} />
+      </SettingsList>
+      <DefaultSectionTitle data-l10n-id='firewall' />
+      <SettingsList>
+        <SettingCheckbox dataL10nId='useFirewall' checked={this.props.braveryDefaults.get(firewall)} onChange={this.onToggleFirewall} />
       </SettingsList>
       <SitePermissionsPage siteSettings={this.props.siteSettings} names={permissionNames} />
       <div data-l10n-id='requiresRestart' className={css(commonStyles.requiresRestart)} />

@@ -4,24 +4,9 @@
 
 const ip = require('ip')
 const Filtering = require('./filtering')
-const urlParse = require('./common/urlParse')
-const appConfig = require('../js/constants/appConfig')
+const {isInternalUrl} = require('../js/lib/urlutil')
 
 module.exports.resourceName = 'firewall'
-// TODO: make this user-configurable for corp intranet networks, etc.
-const whitelistHosts = appConfig[module.exports.resourceName].whitelistHosts
-
-/**
- * Whether a URL is an internal address
- * @param {string} url
- */
-const isInternalUrl = (url) => {
-  if (!url) {
-    return false
-  }
-  const hostname = urlParse(url).hostname
-  return ip.isPrivate(hostname) || whitelistHosts.includes(hostname)
-}
 
 const onHeadersReceived = (details) => {
   const result = { resourceName: module.exports.resourceName }
@@ -31,12 +16,11 @@ const onHeadersReceived = (details) => {
 
   if ((isIPInternal || isUrlInternal) && !isInternalUrl(mainFrameUrl)) {
     // Block requests to local origins from non-local top-level origins
-    console.log('canceling cross-boundary request', details.url, mainFrameUrl, details.ip, details.cached)
-    // TODO: Make sure this works as expected for form posts
+    console.log('firewall blocked request from external IP to internal IP')
     result.cancel = true
   } else if (isIPInternal && !isUrlInternal) {
     // Block requests to an external name that resolves to an internal address
-    console.log('canceling mismatched request', details.url, mainFrameUrl, details.ip, details.cached)
+    console.log('firewall blocked request for internal IP with external hostname')
     result.cancel = true
   }
 
@@ -46,3 +30,5 @@ const onHeadersReceived = (details) => {
 module.exports.init = () => {
   Filtering.registerHeadersReceivedFilteringCB(onHeadersReceived)
 }
+
+module.exports.isInternalUrl = isInternalUrl
