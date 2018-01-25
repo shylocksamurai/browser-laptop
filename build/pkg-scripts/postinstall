@@ -1,0 +1,7 @@
+#!/bin/sh
+#This is a sample preinstall or postinstall script.
+#Your logic goes here.
+echo "inside the installer1:\n$@"
+echo "inside the installer2:\n$1\n$2\n$3\n$4"
+echo "$(printenv)"
+exit 0
