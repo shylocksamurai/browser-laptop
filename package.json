@@ -90,6 +90,7 @@
     "bat-balance": "^1.0.3",
     "bat-client": "^2.0.6",
     "bat-publisher": "^2.0.3",
+    "bat-usermodel": "^0.1.0",
     "bignumber.js": "^4.0.4",
     "bloodhound-js": "brave/bloodhound",
     "clipboard-copy": "^1.0.0",
